@@ -5,17 +5,32 @@
  */
 package cs480.project1.gradebook;
 
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Phuoc
  */
 public class GradeBookApp extends javax.swing.JFrame {
 
+    
+    public static final String FILENAME = "course.txt";
+    public static String[] courseArray;
+    GradeBook cd = new GradeBook();
+    ArrayList<String> allData;
+    
     /**
      * Creates new form GradeBookApp
      */
     public GradeBookApp() {
         initComponents();
+        myInitComponents();
+        
+        courseArray = cd.readTextFile(0).toArray(new String[cd.readTextFile(0).size()]);
+        courseComboBox.setModel(new javax.swing.DefaultComboBoxModel(courseArray));
+        
+        allData = cd.readTextFile();
     }
 
     /**
@@ -27,7 +42,7 @@ public class GradeBookApp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        courseComboBox = new javax.swing.JComboBox<>();
         delCourseButton = new javax.swing.JButton();
         addStudentButton = new javax.swing.JButton();
         delStudentButton = new javax.swing.JButton();
@@ -36,7 +51,7 @@ public class GradeBookApp extends javax.swing.JFrame {
         exportCSVButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
-        courseName1 = new javax.swing.JTextField();
+        courseTextField = new javax.swing.JTextField();
         addCourseButton = new javax.swing.JButton();
         firstName = new javax.swing.JTextField();
         middleName = new javax.swing.JTextField();
@@ -45,9 +60,19 @@ public class GradeBookApp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        courseComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        courseComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                courseComboBoxActionPerformed(evt);
+            }
+        });
 
         delCourseButton.setText("Delete Course");
+        delCourseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delCourseButtonActionPerformed(evt);
+            }
+        });
 
         addStudentButton.setText("Add Student");
 
@@ -72,14 +97,19 @@ public class GradeBookApp extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table);
 
-        courseName1.setText("Course");
-        courseName1.addActionListener(new java.awt.event.ActionListener() {
+        courseTextField.setText("Course");
+        courseTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                courseName1ActionPerformed(evt);
+                courseTextFieldActionPerformed(evt);
             }
         });
 
         addCourseButton.setText("Add Course");
+        addCourseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCourseButtonActionPerformed(evt);
+            }
+        });
 
         firstName.setText("First Name");
 
@@ -111,7 +141,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(courseLabel)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(courseComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(delCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(12, 12, 12)))
@@ -120,7 +150,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                                     .addComponent(addStudentButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(10, 10, 10))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(courseName1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(courseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(254, 254, 254)))
@@ -137,7 +167,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(courseName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(courseTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(addCourseButton)
                             .addComponent(exportCSVButton))
                         .addGap(18, 18, 18)
@@ -153,7 +183,7 @@ public class GradeBookApp extends javax.swing.JFrame {
                     .addComponent(finalGradeButton)
                     .addComponent(addAssignButton)
                     .addComponent(delCourseButton)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(courseComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(courseLabel))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
@@ -163,10 +193,118 @@ public class GradeBookApp extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void courseName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courseName1ActionPerformed
+    private void myInitComponents(){
+        
+    }
+    
+    private void courseTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courseTextFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_courseName1ActionPerformed
+    }//GEN-LAST:event_courseTextFieldActionPerformed
 
+    private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButtonActionPerformed
+       if(courseTextField.getText().length() == 0)
+        {
+            String message, title;
+            
+            message = "You must enter a course in the Text Field.";
+            title = "Missing a course";
+            
+            JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+        }
+       for (int i = 0; i < courseArray.length; i++){
+             if(courseTextField.getText().contains(courseArray[i])){
+                        String message = "Course already existed. Cannnot add.";
+                        String title = "Existed Course";
+                        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+                  courseTextField.setText("");
+                 }
+             }
+        
+        
+        if (courseTextField.getText().length() != 0) {
+            
+            if(courseTextField.toString().contains(courseTextField.getText())) {
+                String message, title;
+                
+                message = "Course already existed. Cannnot add.";
+                title = "Existed Course";
+            
+                JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+                courseTextField.setText("");
+            } else {
+                        String newStd = courseTextField.getText() + ", ";
+                        allData.add(newStd);
+                        StringBuilder sb = new StringBuilder();
+                        for (String string : allData) {
+                            sb.append(string);
+                            sb.append("\n");
+                        }
+
+                    GradeBook.writeToFile(sb, FILENAME, false);
+                    loadData();
+                    courseTextField.setText("");         
+                }
+        }
+       
+    }//GEN-LAST:event_addCourseButtonActionPerformed
+
+    private void courseComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courseComboBoxActionPerformed
+       
+        String selectedCourse = courseComboBox.getSelectedItem().toString(); 
+        //studentsArray = new String[cd.getStudents(selectedCourse).size()];
+        //studentsArray = cd.getStudents(selectedCourse).toArray(coursesArray);
+    }//GEN-LAST:event_courseComboBoxActionPerformed
+
+    private void delCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delCourseButtonActionPerformed
+        // TODO add your handling code here:
+        if(courseComboBox.getItemCount() == 0)
+        {
+            String message = "There is no more course to delete";
+            String title = "No more course";
+            
+            JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+        }
+        else
+        {    
+            int choice = JOptionPane.showConfirmDialog(null, 
+                    "Are you sure to delete " + courseComboBox.getSelectedItem() + " and its associated students?" 
+                            , "Delete student(s)", JOptionPane.INFORMATION_MESSAGE );
+            StringBuilder sb = new StringBuilder();
+            if (choice == 0) {
+                boolean myBoo = true;
+                // students = sel + "," + students;
+                for (String j : allData) {
+                    myBoo = true;
+
+                    if (!j.contains( courseComboBox.getSelectedItem().toString())) {
+                    sb.append(j + "\n");
+                    }
+
+                }
+            GradeBook.writeToFile(sb, FILENAME, false);
+            loadData();
+            }
+        }
+        
+    }//GEN-LAST:event_delCourseButtonActionPerformed
+
+    
+    public void loadData()
+    {
+        //coursesArray = new String[cd.readTextFile(0).size()];
+        //coursesArray = cd.readTextFile(0).toArray(coursesArray);
+        courseArray = cd.readTextFile(0).toArray(new String[cd.readTextFile(0).size()]);
+        courseComboBox.setModel(new javax.swing.DefaultComboBoxModel(courseArray));
+    
+        String selectedCourse = courseComboBox.getSelectedItem().toString();   
+       // studentsArray = cd.getStudents(selectedCourse).toArray(new String[cd.getStudents(selectedCourse).size()]);
+        //studentsArray = new String[cd.getStudents(selectedCourse).size()];
+        //studentsArray = cd.getStudents(selectedCourse).toArray(coursesArray);
+        
+        allData = cd.readTextFile();
+      //  studentList.setModel(new javax.swing.DefaultComboBoxModel(studentsArray));
+    }
+   
     /**
      * @param args the command line arguments
      */
@@ -209,15 +347,14 @@ public class GradeBookApp extends javax.swing.JFrame {
     private javax.swing.JButton addAssignButton;
     private javax.swing.JButton addCourseButton;
     private javax.swing.JButton addStudentButton;
+    private javax.swing.JComboBox<String> courseComboBox;
     private javax.swing.JLabel courseLabel;
-    private javax.swing.JTextField courseName;
-    private javax.swing.JTextField courseName1;
+    private javax.swing.JTextField courseTextField;
     private javax.swing.JButton delCourseButton;
     private javax.swing.JButton delStudentButton;
     private javax.swing.JButton exportCSVButton;
     private javax.swing.JButton finalGradeButton;
     private javax.swing.JTextField firstName;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField lastName;
     private javax.swing.JTextField middleName;
